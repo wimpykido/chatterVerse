@@ -9,6 +9,8 @@ import {
 import SignIn from "./routes/sign-in/index.tsx";
 import SignUp from "./routes/sign-up/index.tsx";
 import Profile from "./routes/profile/index.tsx";
+import { AuthProvider } from "./context/authContext.tsx";
+import Protected from "./routes/protected/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -25,14 +27,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: (
+      <Protected>
+        <Profile />
+      </Protected>
+    ),
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
