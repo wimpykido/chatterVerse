@@ -10,10 +10,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { UnauthLayout } from "../../components/templates/unauth";
 import ContinueWith from "../../components/continue-with";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
+import { AuthContext, AuthContextProps } from "../../context/authContext";
 
 type SignUpFormFields = {
   email: string;
@@ -33,6 +34,7 @@ const SingUp = () => {
   const [repeatPasswordError, setRepeatPasswordError] = useState<string | null>(
     null
   );
+  const { setUser } = useContext(AuthContext) as AuthContextProps;
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     field: keyof SignUpFormFields
@@ -63,6 +65,8 @@ const SingUp = () => {
         email: auth.currentUser!.email,
         id: auth.currentUser!.uid,
       });
+      setUser(auth.currentUser!);
+      auth.currentUser! && navigate("/profile");
       await setDoc(doc(db, "userChats", auth.currentUser!.uid), {});
     } catch (error) {
       console.log(error);

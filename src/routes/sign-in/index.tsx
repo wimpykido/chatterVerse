@@ -14,7 +14,8 @@ import { UnauthLayout } from "../../components/templates/unauth";
 import ContinueWith from "../../components/continue-with";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
+import { AuthContext, AuthContextProps } from "../../context/authContext";
 
 type SignInFormFields = {
   email: string;
@@ -28,6 +29,7 @@ const signInFormDefaultValues: SignInFormFields = {
 
 const SingIn = () => {
   const [form, setForm] = useState<SignInFormFields>(signInFormDefaultValues);
+  const { setUser } = useContext(AuthContext) as AuthContextProps;
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -44,8 +46,9 @@ const SingIn = () => {
     try {
       signInWithEmailAndPassword(auth, form.email, form.password);
       const user = auth.currentUser!;
+      setUser(user);
       console.log(user);
-      navigate("/profile");
+      user && navigate("/profile");
     } catch (error) {
       console.log(error);
     }
