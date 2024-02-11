@@ -1,5 +1,5 @@
 import { ReactNode, useState, createContext, useEffect } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { getRedirectResult, onAuthStateChanged, User } from "firebase/auth";
 import {
   GoogleAuthProvider,
   signInWithRedirect,
@@ -25,13 +25,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithRedirect(auth, provider);
-    console.log(auth.currentUser);
+    await signInWithRedirect(auth, provider);
+    const result = await getRedirectResult(auth);
+    console.log(result?.user);
+    return result!.user;
   };
 
-  const facebookSignIn = () => {
+  const facebookSignIn = async () => {
     const provider = new FacebookAuthProvider();
     signInWithRedirect(auth, provider);
     console.log(auth.currentUser);

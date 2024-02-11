@@ -4,17 +4,40 @@ import facebook from "../../assets/facebook.png";
 import { AuthContext, AuthContextProps } from "../../context/authContext";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { User } from "firebase/auth";
 
 const ContinueWith = () => {
   const { googleSignIn, facebookSignIn, user } = useContext(
     AuthContext
   ) as AuthContextProps;
   const navigate = useNavigate();
+
   const handleGoogleSignIn = async () => {
     try {
-      await googleSignIn();
+      const signedInUser = await googleSignIn();
+      if (signedInUser !== null && signedInUser !== undefined) {
+        console.log("hi");
+        // await updateUserProfile(signedInUser);
+      } else {
+        console.log("Google sign-in failed.");
+      }
+      console.log("hi2");
     } catch (error) {
       console.log(error);
+    }
+  };
+  const updateUserProfile = async (user: User) => {
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        email: user.email,
+        id: user.uid,
+        bio: "",
+      });
+      console.log("Document successfully written!");
+    } catch (error) {
+      console.error("Error writing document:", error);
     }
   };
   const handleFacebookSignIn = async () => {
@@ -26,9 +49,22 @@ const ContinueWith = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      navigate("/profile");
-    }
+    const fetchData = async () => {
+      if (user) {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnapshot = await getDoc(userDocRef);
+        const userDocSnapshot1 = await getDoc(doc(db, "userChats",user.uid));
+        if (!userDocSnapshot.exists()) {
+          await updateUserProfile(user);
+        }
+        if (!userDocSnapshot1.exists()) {
+          await setDoc(doc(db, "userChats", user.uid), {});
+        }
+        navigate("/profile");
+      }
+    };
+
+    fetchData();
   }, [user, navigate]);
   return (
     <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>

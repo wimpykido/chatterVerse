@@ -56,12 +56,6 @@ export const ChangeAvatar = ({ open, setOpen }: Props) => {
         await updateProfile(user!, {
           photoURL: downloadURL,
         });
-
-        // const userDocRef = doc(db, "users", user!.uid);
-        // await updateDoc(userDocRef, {
-        //   photoURL: downloadURL,
-        // });
-
         console.log("Image URL stored in Firestore:", downloadURL);
 
         setOpen(false);

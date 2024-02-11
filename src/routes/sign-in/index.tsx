@@ -47,7 +47,6 @@ const SingIn = () => {
       signInWithEmailAndPassword(auth, form.email, form.password);
       const user = auth.currentUser!;
       setUser(user);
-      console.log(user);
       user && navigate("/profile");
     } catch (error) {
       console.log(error);
