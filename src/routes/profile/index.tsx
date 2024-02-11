@@ -28,6 +28,8 @@ import {
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ChangeAvatar } from "../../components/avatar_change-modal";
 import { ThemeContext, ThemeContextType } from "../../context/theme-provider";
+import { ResetPassword } from "../../components/reset-password";
+import { DeleteAccount } from "../../components/delete-account";
 
 export enum DetailType {
   DISPLAYNAME = "display name",
@@ -295,6 +297,15 @@ const Profile = () => {
               userDetail={user!.phoneNumber}
             />
           </Box>
+        </Box>
+        <Box
+          marginTop={3}
+          display={"flex"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
+          <ResetPassword />
+          <DeleteAccount />
         </Box>
       </Box>
     </UnauthLayout>
