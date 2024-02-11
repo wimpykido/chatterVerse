@@ -64,6 +64,7 @@ const SingUp = () => {
       await setDoc(doc(db, "users", auth.currentUser!.uid), {
         email: auth.currentUser!.email,
         id: auth.currentUser!.uid,
+        bio: "",
       });
       setUser(auth.currentUser!);
       auth.currentUser! && navigate("/profile");
