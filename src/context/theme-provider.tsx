@@ -60,6 +60,10 @@ const ThemeProvider = ({ children }: Props) => {
         dark: "#dfdfdf",
         contrastText: "#FFFFFF",
       },
+      info: {
+        main: "#e3e5e8",
+        light: "#f2f3f5",
+      },
     },
   });
 
@@ -78,10 +82,14 @@ const ThemeProvider = ({ children }: Props) => {
         dark: "#303030",
         contrastText: "#171717",
       },
+      info: {
+        main: "#1e1f22",
+        light: "#2b2d31",
+      },
     },
   });
 
-  const theme: Theme = !darkMode ? darkTheme : lightTheme;
+  const theme: Theme = darkMode ? darkTheme : lightTheme;
 
   return (
     <ThemeContext.Provider value={{ toggleDarkMode, darkMode }}>
