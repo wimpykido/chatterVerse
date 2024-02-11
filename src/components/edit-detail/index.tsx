@@ -109,19 +109,8 @@ export const Editing = ({
         )}
         <Box mt={2} display="flex" justifyContent="flex-end">
           <Button
-            sx={{
-              border: "1px solid #4e5058",
-              textTransform: "none",
-              backgroundColor: "#4e5058",
-              color: "white",
-              fontWeight: 400,
-              boxShadow: "none",
-              "&:hover": {
-                boxShadow: "none",
-                backgroundColor: "#6d6f78",
-                border: "1px solid #6d6f78",
-              },
-            }}
+            color="secondary"
+            variant="outlined"
             onClick={() => setOpen(false)}
           >
             Cancel
