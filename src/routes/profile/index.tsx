@@ -23,6 +23,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { ChangeAvatar } from "../../components/avatar_change-modal";
 
 export enum DetailType {
   DISPLAYNAME = "display name",
@@ -35,6 +36,8 @@ const Profile = () => {
   const [, setLoading] = useState(false);
   const [change, setChange] = useState(false);
   const [userBio, setUserBio] = useState("");
+  const [open, setOpen] = useState(false);
+
   const navigate = useNavigate();
   const { user } = useContext(AuthContext) as AuthContextProps;
   const theme = useTheme();
@@ -152,7 +155,7 @@ const Profile = () => {
                 <IconButton
                   onMouseEnter={() => setChange(true)}
                   onMouseLeave={() => setChange(false)}
-                  // onClick={handleEditIconClick}
+                  onClick={() => setOpen(true)}
                   style={{
                     position: "absolute",
                     transform: "translate(50%, 0)",
@@ -161,6 +164,7 @@ const Profile = () => {
                   <EditIcon style={{ color: "white" }} />
                 </IconButton>
               )}
+              <ChangeAvatar open={open} setOpen={setOpen} />
             </Box>
             <Box
               width={"100%"}
