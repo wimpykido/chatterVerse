@@ -16,12 +16,14 @@ type Props = {
   children: ReactNode;
 };
 
-type ThemeContextType = {
+export type ThemeContextType = {
   toggleDarkMode: () => void;
   darkMode: boolean;
 };
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType | undefined>(
+  undefined
+);
 
 export const useThemeContext = () => {
   const context = useContext(ThemeContext);
