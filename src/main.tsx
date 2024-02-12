@@ -11,6 +11,7 @@ import SignUp from "./routes/sign-up/index.tsx";
 import Profile from "./routes/profile/index.tsx";
 import { AuthProvider } from "./context/authContext.tsx";
 import Protected from "./routes/protected/index.tsx";
+import Search from "./routes/search/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
     element: (
       <Protected>
         <Profile />
+      </Protected>
+    ),
+  },
+  {
+    path: "/search",
+    element: (
+      <Protected>
+        <Search />
       </Protected>
     ),
   },
