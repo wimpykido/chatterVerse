@@ -8,6 +8,7 @@ import { storage } from "../../firebase";
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  type: "Avatar" | "Cover";
 };
 
 const style = {
@@ -22,7 +23,7 @@ const style = {
   p: 4,
 };
 
-export const ChangeAvatar = ({ open, setOpen }: Props) => {
+export const ChangeAvatar = ({ open, setOpen, type }: Props) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { user } = useContext(AuthContext) as AuthContextProps;
   const theme = useTheme();
@@ -39,11 +40,16 @@ export const ChangeAvatar = ({ open, setOpen }: Props) => {
     const selectedFile = event.target.files?.[0];
 
     if (selectedFile) {
+      let storageRef;
       try {
-        const storageRef = ref(
-          storage,
-          `avatars/${user!.uid}/${selectedFile.name}`
-        );
+        if (type === "Avatar") {
+          storageRef = ref(
+            storage,
+            `avatars/${user!.uid}/${selectedFile.name}`
+          );
+        } else {
+          storageRef = ref(storage, `covers/${user!.uid}/cover-${user!.uid}`);
+        }
         const metadata = {
           customMetadata: {
             uid: user!.uid,
@@ -53,9 +59,11 @@ export const ChangeAvatar = ({ open, setOpen }: Props) => {
 
         const downloadURL = await getDownloadURL(storageRef);
 
-        await updateProfile(user!, {
-          photoURL: downloadURL,
-        });
+        if (type === "Avatar") {
+          await updateProfile(user!, {
+            photoURL: downloadURL,
+          });
+        }
         console.log("Image URL stored in Firestore:", downloadURL);
 
         setOpen(false);
@@ -85,7 +93,7 @@ export const ChangeAvatar = ({ open, setOpen }: Props) => {
             color={theme.palette.primary.contrastText}
             variant="body1"
           >
-            Change Avatar
+            Change {type}
           </Typography>
         </Button>
         <Button
@@ -94,7 +102,7 @@ export const ChangeAvatar = ({ open, setOpen }: Props) => {
           onClick={() => console.log("Delete Avatar")}
         >
           <Typography textTransform={"none"} variant="body1">
-            Delete Avatar
+            Delete {type}
           </Typography>
         </Button>
       </Box>

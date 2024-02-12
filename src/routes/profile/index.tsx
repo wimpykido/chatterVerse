@@ -16,6 +16,7 @@ import {
 import { UserDetail } from "../../components/user-detail";
 import avatar from "../../assets/9.png";
 import EditIcon from "@mui/icons-material/Edit";
+import { BackgroundImageComp } from "../../components/background-image";
 
 import {
   EmailAuthProvider,
@@ -210,7 +211,6 @@ const Profile = () => {
           justifyContent={"space-between"}
           alignItems={"center"}
           alignContent={"center"}
-          marginBottom={5}
         >
           <Typography variant="h2" fontSize={"24px"}>
             My Account
@@ -224,82 +224,104 @@ const Profile = () => {
             label="switch theme"
           />
         </Box>
-        <Box
-          width={"100%"}
-          p={2}
-          bgcolor={theme.palette.info.main}
-          borderRadius={2}
-        >
+        <Box width={"100%"} bgcolor={theme.palette.info.main} borderRadius={2}>
           <Box
-            marginTop={4}
             gap={3}
-            marginBottom={4}
             display={"flex"}
             alignItems={"center"}
+            position={"relative"}
           >
-            <Box display={"flex"} alignItems={"center"}>
-              <Avatar
-                src={user?.photoURL ? user?.photoURL : avatar}
-                sx={{ width: "100px", height: "100px", position: "relative" }}
-                onMouseEnter={() => setChange(true)}
-                onMouseLeave={() => setChange(false)}
-              />
-              {change && (
-                <IconButton
-                  onMouseEnter={() => setChange(true)}
-                  onMouseLeave={() => setChange(false)}
-                  onClick={() => setOpen(true)}
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    position: "absolute",
-                    // transform: "translate(50%, -50%)",
-                  }}
-                >
-                  <EditIcon style={{ color: "white" }} />
-                </IconButton>
-              )}
-              <ChangeAvatar open={open} setOpen={setOpen} />
-            </Box>
+            <BackgroundImageComp />
             <Box
+              paddingX={2}
               width={"100%"}
               display={"flex"}
-              justifyContent={"space-between"}
               alignItems={"center"}
+              justifyContent={"space-between"}
+              position={"absolute"}
+              sx={{
+                zIndex: 1,
+                transform: "translate(0, 100%)",
+              }}
             >
-              {" "}
-              <Typography>
-                {user!.displayName ? user!.displayName : user!.email}
-              </Typography>
-              <Button
-                variant="contained"
-                onClick={handleLogout}
-                sx={{
-                  border: "1px solid #5865f2",
-                  textTransform: "none",
-                  backgroundColor: "#5865f2",
-                  color: "white",
-                  fontWeight: 400,
-                  boxShadow: "none",
-                  "&:hover": {
-                    boxShadow: "none",
-                    backgroundColor: "#4752c4",
-                    border: "1px solid #4752c4",
-                  },
-                  fontSize: 14,
-                }}
+              <Box display={"flex"} alignItems={"center"}>
+                <Box
+                  bgcolor={theme.palette.info.main}
+                  borderRadius={"50%"}
+                  p={1}
+                >
+                  <Avatar
+                    src={user?.photoURL ? user?.photoURL : avatar}
+                    sx={{
+                      width: "100px",
+                      height: "100px",
+                      position: "relative",
+                    }}
+                    onMouseEnter={() => setChange(true)}
+                    onMouseLeave={() => setChange(false)}
+                  />
+
+                  {change && (
+                    <IconButton
+                      onMouseEnter={() => setChange(true)}
+                      onMouseLeave={() => setChange(false)}
+                      onClick={() => setOpen(true)}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        position: "absolute",
+                        transform: "translate(0, -100%)",
+                      }}
+                    >
+                      <EditIcon style={{ color: "white" }} />
+                    </IconButton>
+                  )}
+                </Box>
+                <ChangeAvatar type="Avatar" open={open} setOpen={setOpen} />
+              </Box>
+              <Box
+                width={"100%"}
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
               >
-                Log out
-              </Button>
+                {" "}
+                <Typography>
+                  {user!.displayName ? user!.displayName : user!.email}
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={handleLogout}
+                  sx={{
+                    display: "none",
+                    border: "1px solid #5865f2",
+                    textTransform: "none",
+                    backgroundColor: "#5865f2",
+                    color: "white",
+                    fontWeight: 400,
+                    boxShadow: "none",
+                    "&:hover": {
+                      boxShadow: "none",
+                      backgroundColor: "#4752c4",
+                      border: "1px solid #4752c4",
+                    },
+                    fontSize: 14,
+                  }}
+                >
+                  Log out
+                </Button>
+              </Box>
             </Box>
           </Box>
           <Box
+            margin={2}
             borderRadius={2}
             p={3}
             bgcolor={theme.palette.info.light}
-            gap={4}
+            gap={2}
             flexDirection={"column"}
             display={"flex"}
+            marginTop={10}
           >
             <UserDetail
               editDisplayName={editDisplayName}
@@ -324,7 +346,7 @@ const Profile = () => {
         </Box>
         <Box
           width={"100%"}
-          marginTop={3}
+          marginTop={2}
           display={"flex"}
           justifyContent={"space-between"}
           alignItems={"center"}
