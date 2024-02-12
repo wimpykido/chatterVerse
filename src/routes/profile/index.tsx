@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import { UserDetail } from "../../components/user-detail";
 import avatar from "../../assets/9.png";
-import { UnauthLayout } from "../../components/templates/unauth";
 import EditIcon from "@mui/icons-material/Edit";
 
 import {
@@ -30,6 +29,7 @@ import { ChangeAvatar } from "../../components/avatar_change-modal";
 import { ThemeContext, ThemeContextType } from "../../context/theme-provider";
 import { ResetPassword } from "../../components/reset-password";
 import { DeleteAccount } from "../../components/delete-account";
+import { AuthLayout } from "../../components/templates/auth";
 
 export enum DetailType {
   DISPLAYNAME = "display name",
@@ -193,14 +193,26 @@ const Profile = () => {
   }));
 
   return (
-    <UnauthLayout>
-      <Box width={"60%"} p={3}>
+    <AuthLayout>
+      <Box
+        height={"100%"}
+        width={"80%"}
+        p={5}
+        alignSelf={"center"}
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"flex-start"}
+        justifyContent={"space-between"}
+      >
         <Box
+          width={"100%"}
           display={"flex"}
           justifyContent={"space-between"}
           alignItems={"center"}
+          alignContent={"center"}
+          marginBottom={5}
         >
-          <Typography variant="h2" fontSize={"24px"} marginBottom={3}>
+          <Typography variant="h2" fontSize={"24px"}>
             My Account
           </Typography>
           <FormControlLabel
@@ -212,13 +224,23 @@ const Profile = () => {
             label="switch theme"
           />
         </Box>
-
-        <Box p={2} bgcolor={theme.palette.info.main} borderRadius={2}>
-          <Box gap={2} marginBottom={2} display={"flex"} alignItems={"center"}>
+        <Box
+          width={"100%"}
+          p={2}
+          bgcolor={theme.palette.info.main}
+          borderRadius={2}
+        >
+          <Box
+            marginTop={4}
+            gap={3}
+            marginBottom={4}
+            display={"flex"}
+            alignItems={"center"}
+          >
             <Box display={"flex"} alignItems={"center"}>
               <Avatar
                 src={user?.photoURL ? user?.photoURL : avatar}
-                sx={{ width: "80px", height: "80px", position: "relative" }}
+                sx={{ width: "100px", height: "100px", position: "relative" }}
                 onMouseEnter={() => setChange(true)}
                 onMouseLeave={() => setChange(false)}
               />
@@ -228,8 +250,10 @@ const Profile = () => {
                   onMouseLeave={() => setChange(false)}
                   onClick={() => setOpen(true)}
                   style={{
+                    width: "100px",
+                    height: "100px",
                     position: "absolute",
-                    transform: "translate(50%, 0)",
+                    // transform: "translate(50%, -50%)",
                   }}
                 >
                   <EditIcon style={{ color: "white" }} />
@@ -271,9 +295,9 @@ const Profile = () => {
           </Box>
           <Box
             borderRadius={2}
-            p={2}
+            p={3}
             bgcolor={theme.palette.info.light}
-            gap={3}
+            gap={4}
             flexDirection={"column"}
             display={"flex"}
           >
@@ -299,6 +323,7 @@ const Profile = () => {
           </Box>
         </Box>
         <Box
+          width={"100%"}
           marginTop={3}
           display={"flex"}
           justifyContent={"space-between"}
@@ -308,7 +333,7 @@ const Profile = () => {
           <DeleteAccount />
         </Box>
       </Box>
-    </UnauthLayout>
+    </AuthLayout>
   );
 };
 
