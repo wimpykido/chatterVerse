@@ -1,5 +1,10 @@
 import { Box, Button, Modal, Typography, useTheme } from "@mui/material";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import React, { useContext, useRef } from "react";
 import { AuthContext, AuthContextProps } from "../../context/authContext";
 import { updateProfile } from "firebase/auth";
@@ -9,6 +14,8 @@ type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   type: "Avatar" | "Cover";
+  setChange?: React.Dispatch<React.SetStateAction<boolean>>;
+  setCoverURL?: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const style = {
@@ -23,7 +30,13 @@ const style = {
   p: 4,
 };
 
-export const ChangeAvatar = ({ open, setOpen, type }: Props) => {
+export const ChangeAvatar = ({
+  open,
+  setOpen,
+  type,
+  setChange,
+  setCoverURL,
+}: Props) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { user } = useContext(AuthContext) as AuthContextProps;
   const theme = useTheme();
@@ -63,13 +76,39 @@ export const ChangeAvatar = ({ open, setOpen, type }: Props) => {
           await updateProfile(user!, {
             photoURL: downloadURL,
           });
+        } else {
+          setCoverURL && setCoverURL(downloadURL);
         }
         console.log("Image URL stored in Firestore:", downloadURL);
 
         setOpen(false);
+        setChange && setChange(false);
       } catch (error) {
         console.error("Error updating avatar:", error);
       }
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      let storageRef;
+
+      if (type === "Avatar") {
+        storageRef = ref(
+          storage,
+          `avatars/${user!.uid}/${user!.uid}-avatar.jpg`
+        );
+        await updateProfile(user!, { photoURL: null });
+      } else {
+        storageRef = ref(storage, `covers/${user!.uid}/cover-${user!.uid}`);
+        setCoverURL && setCoverURL(null);
+      }
+
+      await deleteObject(storageRef);
+      setOpen(false);
+      setChange && setChange(false);
+    } catch (error) {
+      console.error("Error deleting:", error);
     }
   };
   return (
@@ -96,11 +135,7 @@ export const ChangeAvatar = ({ open, setOpen, type }: Props) => {
             Change {type}
           </Typography>
         </Button>
-        <Button
-          fullWidth
-          color="error"
-          onClick={() => console.log("Delete Avatar")}
-        >
+        <Button fullWidth color="error" onClick={() => handleDelete()}>
           <Typography textTransform={"none"} variant="body1">
             Delete {type}
           </Typography>

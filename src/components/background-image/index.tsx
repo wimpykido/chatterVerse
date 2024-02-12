@@ -9,7 +9,6 @@ export const BackgroundImageComp = () => {
   const [change, setChange] = useState(false);
   const [open, setOpen] = useState(false);
   const [coverURL, setCoverURL] = useState<string | null>(null);
-  const [keyForRemount, setKeyForRemount] = useState(0);
 
   const { user } = useContext(AuthContext) as AuthContextProps;
   useEffect(() => {
@@ -21,7 +20,7 @@ export const BackgroundImageComp = () => {
         );
         const downloadURL = await getDownloadURL(storageRef);
         setCoverURL(downloadURL);
-        handleCoverChange();
+        setChange(false);
       } catch (error) {
         console.error("Error fetching cover:", error);
         setCoverURL(null);
@@ -29,11 +28,7 @@ export const BackgroundImageComp = () => {
     };
 
     fetchCoverURL();
-  }, [keyForRemount, user]);
-
-  const handleCoverChange = () => {
-    setKeyForRemount((prevKey) => prevKey + 1);
-  };
+  }, [user]);
 
   return (
     <Box
@@ -71,7 +66,13 @@ export const BackgroundImageComp = () => {
           </Button>
         </Box>
       )}
-      <ChangeAvatar type="Cover" open={open} setOpen={setOpen} />
+      <ChangeAvatar
+        setChange={setChange}
+        type="Cover"
+        open={open}
+        setOpen={setOpen}
+        setCoverURL={setCoverURL}
+      />
     </Box>
   );
 };
