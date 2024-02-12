@@ -1,14 +1,17 @@
 import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
-import { ReactNode } from "react";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ChatIcon from "@mui/icons-material/Chat";
 import SearchIcon from "@mui/icons-material/Search";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { CurrentUser } from "../current-user";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
 };
 export const AuthLayout = ({ children }: Props) => {
+  const navigate = useNavigate();
   const theme = useTheme();
   return (
     <Box
@@ -34,6 +37,7 @@ export const AuthLayout = ({ children }: Props) => {
           display={"flex"}
           flexDirection={"column"}
           alignItems={"center"}
+          gap={2}
         >
           <Typography
             alignSelf={"center"}
@@ -46,19 +50,7 @@ export const AuthLayout = ({ children }: Props) => {
           >
             ChatterVerse
           </Typography>
-          <Button
-            fullWidth
-            startIcon={<AccountCircleIcon />}
-            sx={{
-              textAlign: "left",
-              justifyContent: "flex-start",
-              color: theme.palette.primary.contrastText,
-            }}
-          >
-            <Typography textTransform={"none"} sx={{ textAlign: "left" }}>
-              Profile
-            </Typography>
-          </Button>
+          <CurrentUser />
           <Button
             fullWidth
             startIcon={<ChatIcon />}
@@ -87,11 +79,18 @@ export const AuthLayout = ({ children }: Props) => {
           </Button>
         </Box>
         <Box p={3} width={"100%"}>
-          <Button fullWidth color="secondary" variant="outlined">
+          <Button
+            fullWidth
+            color="secondary"
+            variant="outlined"
+            onClick={async () => {
+              await auth.signOut();
+              navigate("/sign-in");
+            }}
+          >
             Log Out
           </Button>
           <Button
-            color="warning"
             variant="text"
             fullWidth
             startIcon={<ReportProblemIcon />}
@@ -99,9 +98,14 @@ export const AuthLayout = ({ children }: Props) => {
               textAlign: "left",
               justifyContent: "flex-start",
               marginTop: 1,
+              color: "#A0A0A0",
             }}
           >
-            <Typography textTransform={"none"} sx={{ textAlign: "left" }}>
+            <Typography
+              fontSize={"14px"}
+              textTransform={"none"}
+              sx={{ textAlign: "left" }}
+            >
               Report a Problem
             </Typography>
           </Button>
