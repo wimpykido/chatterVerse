@@ -1,11 +1,11 @@
 import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import SearchIcon from "@mui/icons-material/Search";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { CurrentUser } from "../current-user";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { ReactNode } from "react";
+import { ProblemReport } from "../report-problem";
 
 type Props = {
   children: ReactNode;
@@ -66,6 +66,7 @@ export const AuthLayout = ({ children }: Props) => {
           </Button>
           <Button
             fullWidth
+            onClick={() => navigate("/search")}
             startIcon={<SearchIcon />}
             sx={{
               textAlign: "left",
@@ -90,25 +91,7 @@ export const AuthLayout = ({ children }: Props) => {
           >
             Log Out
           </Button>
-          <Button
-            variant="text"
-            fullWidth
-            startIcon={<ReportProblemIcon />}
-            sx={{
-              textAlign: "left",
-              justifyContent: "flex-start",
-              marginTop: 1,
-              color: "#A0A0A0",
-            }}
-          >
-            <Typography
-              fontSize={"14px"}
-              textTransform={"none"}
-              sx={{ textAlign: "left" }}
-            >
-              Report a Problem
-            </Typography>
-          </Button>
+          <ProblemReport />
         </Box>
       </Stack>
       {children}
