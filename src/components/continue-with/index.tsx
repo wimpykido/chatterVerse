@@ -19,7 +19,6 @@ const ContinueWith = () => {
       const signedInUser = await googleSignIn();
       if (signedInUser !== null && signedInUser !== undefined) {
         console.log("hi");
-        // await updateUserProfile(signedInUser);
       } else {
         console.log("Google sign-in failed.");
       }
@@ -28,11 +27,16 @@ const ContinueWith = () => {
       console.log(error);
     }
   };
-  const updateUserProfile = async (user: User) => {
+  const updateUserProfile = async (newUser: User) => {
     try {
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        id: user.uid,
+      await setDoc(doc(db, "users", newUser.uid), {
+        photoURL: newUser.photoURL || "",
+        coverURL: "",
+        email: newUser.email || "",
+        id: newUser.uid,
+        displayName: newUser.displayName || "",
+        phoneNumber: newUser.phoneNumber || "",
+        emailVerified: newUser.emailVerified,
         bio: "",
       });
       console.log("Document successfully written!");
@@ -40,6 +44,7 @@ const ContinueWith = () => {
       console.error("Error writing document:", error);
     }
   };
+
   const handleFacebookSignIn = async () => {
     try {
       await facebookSignIn();
@@ -53,7 +58,7 @@ const ContinueWith = () => {
       if (user) {
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnapshot = await getDoc(userDocRef);
-        const userDocSnapshot1 = await getDoc(doc(db, "userChats",user.uid));
+        const userDocSnapshot1 = await getDoc(doc(db, "userChats", user.uid));
         if (!userDocSnapshot.exists()) {
           await updateUserProfile(user);
         }

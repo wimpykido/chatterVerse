@@ -60,10 +60,20 @@ const SingUp = () => {
 
   const handleSignUp = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, form.email, form.password);
-      await setDoc(doc(db, "users", auth.currentUser!.uid), {
-        email: auth.currentUser!.email,
-        id: auth.currentUser!.uid,
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        form.email,
+        form.password
+      );
+      const newUser = userCredential.user;
+      await setDoc(doc(db, "users", newUser.uid), {
+        photoURL: newUser.photoURL || "",
+        coverURL: "",
+        email: newUser.email || "",
+        id: newUser.uid,
+        displayName: newUser.displayName || "",
+        phoneNumber: newUser.phoneNumber || "",
+        emailVerified: newUser.emailVerified,
         bio: "",
       });
       setUser(auth.currentUser!);

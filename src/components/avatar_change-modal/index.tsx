@@ -8,7 +8,8 @@ import {
 import React, { useContext, useRef } from "react";
 import { AuthContext, AuthContextProps } from "../../context/authContext";
 import { updateProfile } from "firebase/auth";
-import { storage } from "../../firebase";
+import { db, storage } from "../../firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
 type Props = {
   open: boolean;
@@ -54,6 +55,7 @@ export const ChangeAvatar = ({
 
     if (selectedFile) {
       let storageRef;
+      const userDocRef = doc(db, "users", user!.uid);
       try {
         if (type === "Avatar") {
           storageRef = ref(
@@ -76,8 +78,14 @@ export const ChangeAvatar = ({
           await updateProfile(user!, {
             photoURL: downloadURL,
           });
+          await updateDoc(userDocRef, {
+            photoURL: downloadURL,
+          });
         } else {
           setCoverURL && setCoverURL(downloadURL);
+          await updateDoc(userDocRef, {
+            coverURL: downloadURL,
+          });
         }
         console.log("Image URL stored in Firestore:", downloadURL);
 

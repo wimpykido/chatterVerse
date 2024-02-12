@@ -69,6 +69,11 @@ const Profile = () => {
       await updateProfile(user, {
         displayName: editedValue,
       });
+      const userDocRef = doc(db, "users", user.uid);
+
+      await updateDoc(userDocRef, {
+        displayName: editedValue,
+      });
     } catch (error) {
       console.error("Error updating profile:", error);
     } finally {
@@ -102,18 +107,16 @@ const Profile = () => {
     if (!user) {
       return;
     }
-    setLoading(true);
+
     try {
-      const userDocRef = doc(db, "users", user!.uid);
-      console.log(user!.uid);
+      const userDocRef = doc(db, "users", user.uid);
+
       await updateDoc(userDocRef, {
         bio: editedValue,
       });
       setUserBio(editedValue);
     } catch (error) {
       console.error("Error updating bio in Firestore:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
