@@ -1,4 +1,4 @@
-import { Box, List } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { SearchBar } from "../../components/search-bar";
 import { AuthLayout } from "../../components/templates/auth";
 import { DocumentData, collection, getDocs } from "firebase/firestore";
@@ -48,7 +48,7 @@ const Search = () => {
   return (
     <AuthLayout>
       <Box
-        p={3}
+        p={4}
         alignSelf={"flex-start"}
         width={"80%"}
         display={"flex"}
@@ -60,11 +60,11 @@ const Search = () => {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <List>
+          <Stack width={"100%"} alignSelf={"center"}>
             {filteredUsers.map((user) => (
               <UserListItem user={user} key={user.uid} />
             ))}
-          </List>
+          </Stack>
         )}
       </Box>
     </AuthLayout>

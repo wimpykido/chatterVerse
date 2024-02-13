@@ -20,7 +20,7 @@ export const SearchBar = ({ searchTerm, handleSearch }: Props) => {
           p: "2px 4px",
           display: "flex",
           alignItems: "center",
-          width: "70%",
+          width: "100%",
         }}
       >
         <InputBase
