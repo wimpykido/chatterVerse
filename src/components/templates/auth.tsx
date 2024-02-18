@@ -52,6 +52,7 @@ export const AuthLayout = ({ children }: Props) => {
           </Typography>
           <CurrentUser />
           <Button
+            onClick={() => navigate("/chats")}
             fullWidth
             startIcon={<ChatIcon />}
             sx={{
