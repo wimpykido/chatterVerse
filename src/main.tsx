@@ -12,6 +12,9 @@ import Profile from "./routes/profile/index.tsx";
 import { AuthProvider } from "./context/authContext.tsx";
 import Protected from "./routes/protected/index.tsx";
 import Search from "./routes/search/index.tsx";
+import { ErrorBoundary } from "react-error-boundary";
+import Chats from "./routes/chats/index.tsx";
+import { ChatContextProvider } from "./context/chat-context.tsx";
 
 const router = createBrowserRouter([
   {
@@ -42,14 +45,26 @@ const router = createBrowserRouter([
       </Protected>
     ),
   },
+  {
+    path: "/chats",
+    element: (
+      <ChatContextProvider>
+        <Protected>
+          <Chats />
+        </Protected>
+      </ChatContextProvider>
+    ),
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <ThemeProvider>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </AuthProvider>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <AuthProvider>
+        <ThemeProvider>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
