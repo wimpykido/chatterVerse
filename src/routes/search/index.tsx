@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { SearchBar } from "../../components/search-bar";
 import { AuthLayout } from "../../components/templates/auth";
 import { DocumentData, collection, getDocs } from "firebase/firestore";
@@ -52,19 +52,33 @@ const Search = () => {
         alignSelf={"flex-start"}
         width={"80%"}
         display={"flex"}
-        justifyContent={"center"}
+        justifyContent={"flex-start"}
         flexDirection={"column"}
-        alignItems={"flex-start"}
+        alignItems={"center"}
+        height={"100%"}
       >
         <SearchBar searchTerm={searchTerm} handleSearch={handleSearch} />
         {isLoading ? (
-          <div>Loading...</div>
+          <CircularProgress size={40} thickness={4} />
         ) : (
-          <Stack width={"100%"} alignSelf={"center"}>
-            {filteredUsers.map((user) => (
-              <UserListItem user={user} key={user.uid} />
-            ))}
+          <Stack width={"100%"}>
+            {filteredUsers.length > 0 &&
+              filteredUsers.map((user) => (
+                <UserListItem otherUser={user} key={user.uid} />
+              ))}
           </Stack>
+        )}
+        {!isLoading && filteredUsers.length === 0 && (
+          <Box
+            height={"100%"}
+            width={"100%"}
+            display={"flex"}
+            justifyContent={"center"}
+            flexDirection={"column"}
+            alignItems={"center"}
+          >
+            <Typography>No users found!</Typography>
+          </Box>
         )}
       </Box>
     </AuthLayout>
