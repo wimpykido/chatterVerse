@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   Stack,
@@ -29,7 +30,7 @@ const signInFormDefaultValues: SignInFormFields = {
 
 const SingIn = () => {
   const [form, setForm] = useState<SignInFormFields>(signInFormDefaultValues);
-  const { setUser } = useContext(AuthContext) as AuthContextProps;
+  const { setUser, loading } = useContext(AuthContext) as AuthContextProps;
 
   const navigate = useNavigate();
   const theme = useTheme();
@@ -146,7 +147,19 @@ const SingIn = () => {
               fontSize: 18,
             }}
           >
-            Continue
+            {loading ? (
+              <CircularProgress
+                size={24}
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
+            ) : (
+              "Continue"
+            )}
           </Button>
         </FormControl>
         <Typography margin={2} textAlign={"center"}>
