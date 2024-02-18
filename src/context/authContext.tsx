@@ -15,6 +15,7 @@ export type AuthContextProps = {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   googleSignIn: () => void;
   facebookSignIn: () => void;
+  loading: boolean;
 };
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -54,6 +55,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser: setUser,
     googleSignIn: googleSignIn,
     facebookSignIn: facebookSignIn,
+    loading: loading,
   };
   return (
     <AuthContext.Provider value={values}>
