@@ -1,5 +1,5 @@
 import { AuthLayout } from "../../components/templates/auth";
-import { Stack, useTheme } from "@mui/material";
+import { Stack } from "@mui/material";
 import ChatComp from "./chat-comp";
 import { useContext, useEffect, useState } from "react";
 import { Chat, ChatContext, ChatContextType } from "../../context/chat-context";

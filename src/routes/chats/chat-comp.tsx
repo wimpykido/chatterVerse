@@ -47,19 +47,21 @@ const ChatComp = ({ user, chat, handleSelect }: Props) => {
             <Typography>
               {user.displayName ? user.displayName : user.email}
             </Typography>
-            <Box
-              display={"flex"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              gap={1}
-            >
-              <Typography variant="body2" fontSize={"10px"}>
-                hi
-              </Typography>
-              <Typography variant="body2" fontSize={"10px"}>
-                {formatTimestamp(chat.createdAt)}
-              </Typography>
-            </Box>
+            {chat.lastMessage !== "" && (
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                gap={1}
+              >
+                <Typography variant="body2" fontSize={"10px"}>
+                  {chat.lastMessage}
+                </Typography>
+                <Typography variant="body2" fontSize={"10px"}>
+                  {formatTimestamp(chat.createdAt)}
+                </Typography>
+              </Box>
+            )}
           </Stack>
         </Box>
       </ListItemButton>
