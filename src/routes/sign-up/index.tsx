@@ -15,6 +15,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { AuthContext, AuthContextProps } from "../../context/authContext";
+import avatar from "../../assets/5.png";
 
 type SignUpFormFields = {
   email: string;
@@ -67,7 +68,7 @@ const SingUp = () => {
       );
       const newUser = userCredential.user;
       await setDoc(doc(db, "users", newUser.uid), {
-        photoURL: newUser.photoURL || "",
+        photoURL: newUser.photoURL || avatar,
         coverURL: "",
         email: newUser.email || "",
         id: newUser.uid,
