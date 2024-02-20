@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { DocumentData } from "firebase/firestore";
 import { Chat } from "../../context/chat-context";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   user: DocumentData;
@@ -16,15 +17,23 @@ type Props = {
 };
 
 const ChatComp = ({ user, chat, handleSelect }: Props) => {
+  const navigate = useNavigate();
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
+  const handleClick = async () => {
+    const serializedUser = encodeURIComponent(JSON.stringify(user));
+    const serializedChat = encodeURIComponent(JSON.stringify(chat));
+    await navigate(`/chats/${chat.chatId}/${serializedUser}/${serializedChat}`);
+    handleSelect();
+  };
+
   return (
     <ListItem sx={{ width: "100%", paddingLeft: 0, paddingRight: 0 }}>
       <ListItemButton
-        onClick={handleSelect}
+        onClick={handleClick}
         sx={{
           display: "flex",
           justifyContent: "space-between",
