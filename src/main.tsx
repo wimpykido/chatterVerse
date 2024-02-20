@@ -15,6 +15,7 @@ import Search from "./routes/search/index.tsx";
 import { ErrorBoundary } from "react-error-boundary";
 import Chats from "./routes/chats/index.tsx";
 import { ChatContextProvider } from "./context/chat-context.tsx";
+import ChatRoom from "./routes/chat-room/index.tsx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,16 @@ const router = createBrowserRouter([
       <ChatContextProvider>
         <Protected>
           <Chats />
+        </Protected>
+      </ChatContextProvider>
+    ),
+  },
+  {
+    path: "chats/:chatId/:serializedUser/:serializedChat",
+    element: (
+      <ChatContextProvider>
+        <Protected>
+          <ChatRoom />
         </Protected>
       </ChatContextProvider>
     ),
