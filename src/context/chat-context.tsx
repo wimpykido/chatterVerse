@@ -5,6 +5,7 @@ export type Chat = {
   id: string;
   createdAt: number;
   lastMessage: string;
+  chatId: string;
 };
 
 type Props = {
