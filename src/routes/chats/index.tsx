@@ -1,5 +1,5 @@
 import { AuthLayout } from "../../components/templates/auth";
-import { Stack } from "@mui/material";
+import { Skeleton, Stack, Typography } from "@mui/material";
 import ChatComp from "./chat-comp";
 import { useContext, useEffect, useState } from "react";
 import { Chat, ChatContext, ChatContextType } from "../../context/chat-context";
@@ -14,6 +14,7 @@ type UserChats = {
 
 const Chats = () => {
   const [chats, setChats] = useState<Array<UserChats> | null>([]);
+  const [loading, setLoading] = useState(true);
 
   const { dispatch } = useContext(ChatContext) as ChatContextType;
   const { user } = useContext(AuthContext) as AuthContextProps;
@@ -26,6 +27,7 @@ const Chats = () => {
   useEffect(() => {
     const fetchUserChats = async () => {
       try {
+        setLoading(true);
         if (user) {
           const userChatsDocRef = doc(db, "userChats", user.uid);
           const userChatsDocSnap = await getDoc(userChatsDocRef);
@@ -65,6 +67,7 @@ const Chats = () => {
               );
               console.log(validUsersArray);
               setChats(validUsersArray);
+              setLoading(false);
             } else {
               console.log("User Chats data is not in the expected format");
             }
@@ -74,6 +77,7 @@ const Chats = () => {
         }
       } catch (error) {
         console.error("Error fetching userChats data:", error);
+        setLoading(false);
       }
     };
     fetchUserChats();
@@ -82,6 +86,16 @@ const Chats = () => {
   return (
     <AuthLayout>
       <Stack width={"80%"} height={"100%"} p={4}>
+        {loading && (
+          <>
+            {Array.from({ length: 7 }).map((_, index) => (
+              <Skeleton key={index} width="100%" height={80} />
+            ))}
+          </>
+        )}
+        {!loading && chats?.length === 0 && (
+          <Typography variant="h6">You do not have any chats.</Typography>
+        )}
         {chats
           ?.sort((a, b) =>
             a.chat.createdAt && b.chat.createdAt
