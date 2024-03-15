@@ -76,7 +76,7 @@ const ContinueWith = () => {
       <IconButton onClick={handleGoogleSignIn}>
         <img width={"32px"} height={"32px"} src={google} alt="Icon 1" />
       </IconButton>
-      <IconButton onClick={handleFacebookSignIn}>
+      <IconButton sx={{ display: "none" }} onClick={handleFacebookSignIn}>
         <img width={"32px"} height={"32px"} src={facebook} alt="Icon 2" />
       </IconButton>
     </Box>
