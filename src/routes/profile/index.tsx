@@ -8,13 +8,15 @@ import {
   Button,
   FormControlLabel,
   IconButton,
+  Skeleton,
   Switch,
   Typography,
   styled,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { UserDetail } from "../../components/user-detail";
-import avatar from "../../assets/9.png";
+import avatar from "../../assets/5.png";
 import EditIcon from "@mui/icons-material/Edit";
 import { BackgroundImageComp } from "../../components/background-image";
 
@@ -47,7 +49,7 @@ const Profile = () => {
   const [checked, setChecked] = useState(true);
 
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext) as AuthContextProps;
+  const { user, loading } = useContext(AuthContext) as AuthContextProps;
   const theme = useTheme();
   const { toggleDarkMode } = useContext(ThemeContext) as ThemeContextType;
 
@@ -196,17 +198,32 @@ const Profile = () => {
     },
   }));
 
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <AuthLayout>
       <Box
         height={"100%"}
-        width={"80%"}
-        p={5}
+        p={isSmallScreen ? 3 : 5}
         alignSelf={"center"}
         display={"flex"}
         flexDirection={"column"}
         alignItems={"flex-start"}
         justifyContent={"space-between"}
+        sx={{
+          width: "100%",
+          overflowY: "auto",
+          "&::-webkit-scrollbar": {
+            width: { xs: "1px", md: "4px" },
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: theme.palette.secondary.light,
+            borderRadius: "5px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#333",
+          },
+        }}
       >
         <Box
           width={"100%"}
@@ -224,7 +241,7 @@ const Profile = () => {
               toggleDarkMode();
               setChecked(!checked);
             }}
-            label="switch theme"
+            label={"switch theme"}
           />
         </Box>
         <Box width={"100%"} bgcolor={theme.palette.info.main} borderRadius={2}>
@@ -253,31 +270,37 @@ const Profile = () => {
                   borderRadius={"50%"}
                   p={1}
                 >
-                  <Avatar
-                    src={user?.photoURL ? user?.photoURL : avatar}
-                    sx={{
-                      width: "100px",
-                      height: "100px",
-                      position: "relative",
-                    }}
-                    onMouseEnter={() => setChange(true)}
-                    onMouseLeave={() => setChange(false)}
-                  />
+                  {loading ? ( // Skeleton for Avatar when loading
+                    <Skeleton variant="circular" width={100} height={100} />
+                  ) : (
+                    <>
+                      <Avatar
+                        src={user?.photoURL ? user?.photoURL : avatar}
+                        sx={{
+                          width: "100px",
+                          height: "100px",
+                          position: "relative",
+                        }}
+                        onMouseEnter={() => setChange(true)}
+                        onMouseLeave={() => setChange(false)}
+                      />
 
-                  {change && (
-                    <IconButton
-                      onMouseEnter={() => setChange(true)}
-                      onMouseLeave={() => setChange(false)}
-                      onClick={() => setOpen(true)}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        position: "absolute",
-                        transform: "translate(0, -100%)",
-                      }}
-                    >
-                      <EditIcon style={{ color: "white" }} />
-                    </IconButton>
+                      {change && (
+                        <IconButton
+                          onMouseEnter={() => setChange(true)}
+                          onMouseLeave={() => setChange(false)}
+                          onClick={() => setOpen(true)}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            position: "absolute",
+                            transform: "translate(0, -100%)",
+                          }}
+                        >
+                          <EditIcon style={{ color: "white" }} />
+                        </IconButton>
+                      )}
+                    </>
                   )}
                 </Box>
                 <ChangeAvatar type="Avatar" open={open} setOpen={setOpen} />
@@ -290,7 +313,13 @@ const Profile = () => {
               >
                 {" "}
                 <Typography>
-                  {user!.displayName ? user!.displayName : user!.email}
+                  {loading ? (
+                    <Skeleton variant="text" width={150} />
+                  ) : user!.displayName ? (
+                    user!.displayName
+                  ) : (
+                    user!.email
+                  )}
                 </Typography>
                 <Button
                   variant="contained"
@@ -311,7 +340,7 @@ const Profile = () => {
                     fontSize: 14,
                   }}
                 >
-                  Log out
+                  {loading ? <Skeleton variant="text" width={80} /> : "Log out"}
                 </Button>
               </Box>
             </Box>
@@ -319,8 +348,8 @@ const Profile = () => {
           <Box
             margin={2}
             borderRadius={2}
-            p={3}
-            bgcolor={theme.palette.info.light}
+            p={isSmallScreen ? 0 : 3}
+            bgcolor={isSmallScreen ? "" : theme.palette.info.light}
             gap={2}
             flexDirection={"column"}
             display={"flex"}
@@ -329,21 +358,21 @@ const Profile = () => {
             <UserDetail
               editDisplayName={editDisplayName}
               detailType={DetailType.DISPLAYNAME}
-              userDetail={user!.displayName}
+              userDetail={loading ? "" : user!.displayName}
             />
             <UserDetail
               detailType={DetailType.EMAIL}
-              userDetail={user!.email}
+              userDetail={loading ? "" : user!.email}
               editEmail={editEmail}
             />
             <UserDetail
               detailType={DetailType.BIO}
-              userDetail={userBio}
+              userDetail={loading ? "" : userBio}
               editBio={editBio}
             />
             <UserDetail
               detailType={DetailType.PHONENUMBER}
-              userDetail={user!.phoneNumber}
+              userDetail={loading ? "" : user!.phoneNumber}
             />
           </Box>
         </Box>
@@ -351,8 +380,10 @@ const Profile = () => {
           width={"100%"}
           marginTop={2}
           display={"flex"}
+          gap={2}
+          flexDirection={isSmallScreen ? "column" : "row"}
           justifyContent={"space-between"}
-          alignItems={"center"}
+          alignItems={isSmallScreen ? "flex-start" : "center"}
         >
           <ResetPassword />
           <DeleteAccount />

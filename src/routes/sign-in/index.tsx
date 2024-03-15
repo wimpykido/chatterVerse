@@ -57,7 +57,8 @@ const SingIn = () => {
     <UnauthLayout>
       <Stack
         padding={3}
-        width={"500px"}
+        minWidth={{ xs: "250px", md: "300px" }}
+        width={{ md: "500px" }}
         bgcolor={theme.palette.primary.main}
         borderRadius={2}
       >

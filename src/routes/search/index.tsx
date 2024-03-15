@@ -50,7 +50,7 @@ const Search = () => {
       <Box
         p={4}
         alignSelf={"flex-start"}
-        width={"80%"}
+        width={"100%"}
         display={"flex"}
         justifyContent={"flex-start"}
         flexDirection={"column"}
