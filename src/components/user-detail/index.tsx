@@ -1,8 +1,18 @@
-import { Box, Button, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useState } from "react";
 import { DetailType } from "../../routes/profile";
 import { Editing } from "../edit-detail";
 import { PhoneAuthCredential } from "firebase/auth";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 
 type Props = {
   detailType: DetailType;
@@ -22,6 +32,8 @@ export const UserDetail = ({
 }: Props) => {
   const [open, setOpen] = useState(false);
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Box
       display={"flex"}
@@ -44,26 +56,30 @@ export const UserDetail = ({
           {userDetail ? userDetail : `You haven't added ${detailType} yet.`}
         </Typography>
       </Stack>
-      <Button
-        onClick={() => setOpen(true)}
-        variant="contained"
-        sx={{
-          border: "1px solid #4e5058",
-          textTransform: "none",
-          backgroundColor: "#4e5058",
-          color: "white",
-          fontWeight: 400,
-          boxShadow: "none",
-          "&:hover": {
+      {isSmallScreen ? (
+        <IconButton>{userDetail ? <EditIcon /> : <AddIcon />}</IconButton>
+      ) : (
+        <Button
+          onClick={() => setOpen(true)}
+          variant="contained"
+          sx={{
+            border: "1px solid #4e5058",
+            textTransform: "none",
+            backgroundColor: "#4e5058",
+            color: "white",
+            fontWeight: 400,
             boxShadow: "none",
-            backgroundColor: "#6d6f78",
-            border: "1px solid #6d6f78",
-          },
-          fontSize: 12,
-        }}
-      >
-        {userDetail ? "edit" : "add"}
-      </Button>
+            "&:hover": {
+              boxShadow: "none",
+              backgroundColor: "#6d6f78",
+              border: "1px solid #6d6f78",
+            },
+            fontSize: 12,
+          }}
+        >
+          {userDetail ? "edit" : "add"}
+        </Button>
+      )}
       <Editing
         editEmail={editEmail}
         editDisplayName={editDisplayName}

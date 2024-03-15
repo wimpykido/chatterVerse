@@ -24,11 +24,11 @@ const ChatComp = ({ user, chat, handleSelect }: Props) => {
   };
 
   const handleClick = async () => {
-    const serializedUser = encodeURIComponent(JSON.stringify(user));
-    const serializedChat = encodeURIComponent(JSON.stringify(chat));
-    await navigate(`/chats/${chat.chatId}/${serializedUser}/${serializedChat}`);
+    await navigate(`/chats/${chat.chatId}/${user.id}`);
     handleSelect();
   };
+
+  console.log("chat", chat);
 
   return (
     <ListItem sx={{ width: "100%", paddingLeft: 0, paddingRight: 0 }}>
@@ -56,7 +56,7 @@ const ChatComp = ({ user, chat, handleSelect }: Props) => {
             <Typography>
               {user.displayName ? user.displayName : user.email}
             </Typography>
-            {chat.lastMessage !== "" && (
+            {chat.lastMessage.content && (
               <Box
                 display={"flex"}
                 justifyContent={"center"}
@@ -64,7 +64,14 @@ const ChatComp = ({ user, chat, handleSelect }: Props) => {
                 gap={1}
               >
                 <Typography variant="body2" fontSize={"10px"}>
-                  {chat.lastMessage}
+                  {chat.lastMessage.senderId !== user.id && " you: "}
+                  {chat.lastMessage.type === "text"
+                    ? chat.lastMessage.content
+                    : chat.lastMessage.type === "image"
+                    ? "sent a photo"
+                    : chat.lastMessage.type === "video"
+                    ? "sent a video"
+                    : ""}
                 </Typography>
                 <Typography variant="body2" fontSize={"10px"}>
                   {formatTimestamp(chat.createdAt)}

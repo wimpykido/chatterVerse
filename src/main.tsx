@@ -57,7 +57,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "chats/:chatId/:serializedUser/:serializedChat",
+    path: "chats/:chatId/:userId",
     element: (
       <ChatContextProvider>
         <Protected>

@@ -1,4 +1,13 @@
-import { Button, Modal, Box, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Modal,
+  Box,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+  IconButton,
+} from "@mui/material";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -9,6 +18,9 @@ export const ProblemReport = () => {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportText, setReportText] = useState("");
   const { user } = useContext(AuthContext) as AuthContextProps;
+  const theme = useTheme();
+
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleReportModalClose = () => {
     setReportModalOpen(false);
@@ -38,26 +50,32 @@ export const ProblemReport = () => {
 
   return (
     <>
-      <Button
-        onClick={() => setReportModalOpen(true)}
-        variant="text"
-        fullWidth
-        startIcon={<ReportProblemIcon />}
-        sx={{
-          textAlign: "left",
-          justifyContent: "flex-start",
-          marginTop: 1,
-          color: "#A0A0A0",
-        }}
-      >
-        <Typography
-          fontSize={"14px"}
-          textTransform={"none"}
-          sx={{ textAlign: "left" }}
+      {isSmallScreen ? (
+        <IconButton onClick={() => setReportModalOpen(true)}>
+          <ReportProblemIcon />
+        </IconButton>
+      ) : (
+        <Button
+          onClick={() => setReportModalOpen(true)}
+          variant="text"
+          fullWidth
+          startIcon={<ReportProblemIcon />}
+          sx={{
+            textAlign: "left",
+            justifyContent: "flex-start",
+            marginTop: 1,
+            color: "#A0A0A0",
+          }}
         >
-          Report a Problem
-        </Typography>
-      </Button>
+          <Typography
+            fontSize={"14px"}
+            textTransform={"none"}
+            sx={{ textAlign: "left" }}
+          >
+            Report a Problem
+          </Typography>
+        </Button>
+      )}
 
       <Modal
         open={reportModalOpen}

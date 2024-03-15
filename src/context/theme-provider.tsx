@@ -66,6 +66,7 @@ const ThemeProvider = ({ children }: Props) => {
         main: "#e3e5e8",
         light: "#f2f3f5",
         dark: "#ffffff",
+        contrastText: "#e3e5e8",
       },
     },
   });
@@ -89,6 +90,7 @@ const ThemeProvider = ({ children }: Props) => {
         main: "#1e1f22",
         light: "#2b2d31",
         dark: "#111214",
+        contrastText: "#323232",
       },
     },
   });

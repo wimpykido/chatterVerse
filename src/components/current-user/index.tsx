@@ -1,13 +1,26 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext, AuthContextProps } from "../../context/authContext";
-import { Avatar, Button, Typography } from "@mui/material";
-import avatar from "../../assets/9.png";
+import {
+  Avatar,
+  Button,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import avatar from "../../assets/5.png";
 
 export const CurrentUser = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext) as AuthContextProps;
-  return (
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  return isSmallScreen ? (
+    <IconButton onClick={() => navigate("/profile")}>
+      <Avatar src={user?.photoURL ? user?.photoURL : ""} />
+    </IconButton>
+  ) : (
     <Button
       sx={{
         textAlign: "left",

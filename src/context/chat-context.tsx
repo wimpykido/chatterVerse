@@ -1,10 +1,13 @@
 import { ReactNode, createContext, useContext, useReducer } from "react";
 import { AuthContext, AuthContextProps } from "./authContext";
+import { DocumentData, doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { Message } from "../routes/chat-room";
 
 export type Chat = {
   id: string;
   createdAt: number;
-  lastMessage: string;
+  lastMessage: Message;
   chatId: string;
 };
 
@@ -25,6 +28,7 @@ type ChatAction = {
 export type ChatContextType = {
   data: ChatState;
   dispatch: React.Dispatch<ChatAction>;
+  getUserById(userId: string): Promise<DocumentData>;
 };
 
 export const ChatContext = createContext<ChatContextType | undefined>(
@@ -35,11 +39,29 @@ export const ChatContextProvider = ({ children }: Props) => {
   const initialState = {
     chatId: null,
     chat: {} as Chat,
+    getUserById: () => {},
   };
 
   const authContext = useContext(AuthContext) as AuthContextProps;
   const { user } = authContext;
 
+  async function getUserById(userId: string) {
+    try {
+      const userRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+
+        return userData;
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      throw error;
+    }
+  }
   const chatReducer = (state: ChatState, action: ChatAction) => {
     switch (action.type) {
       case "CHANGE_USER": {
@@ -75,6 +97,7 @@ export const ChatContextProvider = ({ children }: Props) => {
       value={{
         data: state,
         dispatch,
+        getUserById,
       }}
     >
       {children}

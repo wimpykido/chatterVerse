@@ -19,6 +19,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useContext } from "react";
 import { AuthContext, AuthContextProps } from "../../context/authContext";
 import { db } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   otherUser: DocumentData;
@@ -26,6 +27,8 @@ type Props = {
 
 export const UserListItem = ({ otherUser }: Props) => {
   const { user } = useContext(AuthContext) as AuthContextProps;
+
+  const navigate = useNavigate();
 
   const handleSelect = async () => {
     console.log("current:", user);
@@ -45,20 +48,17 @@ export const UserListItem = ({ otherUser }: Props) => {
             [combinedId + ".userInfo"]: {
               id: otherUser!.id,
             },
-            [combinedId + ".lastMessage"]: {
-              message: "",
-            },
+            [combinedId + ".lastMessage"]: {},
             [combinedId + ".date"]: serverTimestamp(),
           });
           await updateDoc(doc(db, "userChats", otherUser.id), {
             [combinedId + ".userInfo"]: {
               id: user!.uid,
             },
-            [combinedId + ".lastMessage"]: {
-              message: "",
-            },
-           [combinedId + ".date"]: serverTimestamp(),
+            [combinedId + ".lastMessage"]: {},
+            [combinedId + ".date"]: serverTimestamp(),
           });
+          await navigate(`/chats/${combinedId}/${otherUser.id}`);
         } else {
           console.log("arsebobs");
         }

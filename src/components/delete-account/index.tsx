@@ -27,7 +27,12 @@ export const DeleteAccount = () => {
 
   return (
     <>
-      <Button variant="outlined" color="error" onClick={() => setOpen(true)}>
+      <Button
+        sx={{ padding: 0 }}
+        variant="text"
+        color="error"
+        onClick={() => setOpen(true)}
+      >
         Delete Account
       </Button>
       <Modal

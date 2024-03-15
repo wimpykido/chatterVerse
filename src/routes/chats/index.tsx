@@ -1,5 +1,5 @@
 import { AuthLayout } from "../../components/templates/auth";
-import { Skeleton, Stack, Typography } from "@mui/material";
+import { Divider, Skeleton, Stack, Typography } from "@mui/material";
 import ChatComp from "./chat-comp";
 import { useContext, useEffect, useState } from "react";
 import { Chat, ChatContext, ChatContextType } from "../../context/chat-context";
@@ -46,7 +46,7 @@ const Chats = () => {
                       chat: {
                         id: chatData.userInfo.id,
                         createdAt: chatData.date,
-                        lastMessage: chatData.lastMessage.message,
+                        lastMessage: chatData.lastMessage,
                         chatId: chatId,
                       },
                       userData: userData,
@@ -83,9 +83,13 @@ const Chats = () => {
     fetchUserChats();
   }, [user]);
 
+  console.log(chats);
   return (
     <AuthLayout>
-      <Stack width={"80%"} height={"100%"} p={4}>
+      <Stack alignSelf={"center"} width={"100%"} height={"100%"} p={4}>
+        <Typography marginBottom={2} variant="h2" fontSize={"24px"}>
+          chats
+        </Typography>
         {loading && (
           <>
             {Array.from({ length: 7 }).map((_, index) => (
@@ -103,12 +107,15 @@ const Chats = () => {
               : 1
           )
           .map((userChat) => (
-            <ChatComp
-              key={userChat.chat.id}
-              user={userChat.userData}
-              handleSelect={() => handleSelect(userChat.chat)}
-              chat={userChat.chat}
-            />
+            <>
+              <ChatComp
+                key={userChat.chat.id}
+                user={userChat.userData}
+                handleSelect={() => handleSelect(userChat.chat)}
+                chat={userChat.chat}
+              />
+              <Divider />
+            </>
           ))}
       </Stack>
     </AuthLayout>
